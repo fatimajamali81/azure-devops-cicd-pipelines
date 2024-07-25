@@ -15,7 +15,7 @@ parameters:
 
 jobs:
 - job: build_and_deploy
-  displayName: 'Build and Deploy Web API'
+  displayName: 'Build and Deploy Web APP'
  
   steps:
   - checkout: self
