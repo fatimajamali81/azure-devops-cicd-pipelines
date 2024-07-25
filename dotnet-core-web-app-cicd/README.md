@@ -1,21 +1,54 @@
 # .NET Core Web APP CI/CD Pipeline
 
-This pipeline builds and deploys a .NET Core Web APP using Azure DevOps.
+This pipeline contains an Azure DevOps pipeline configuration for building and deploying a .NET Core Web App. The pipeline supports deployment to both development (DEV) and quality assurance (QA) environments.
 
 ## Pipeline Overview
 
-1. **Use .NET Core SDK**: Ensures the required .NET Core SDK is used.
-2. **NuGet Restore**: Restores NuGet packages.
-3. **Build Solution**: Builds the .NET solution.
-4. **Publish**: Publishes the build output.
-5. **Deploy to Azure App Service**: Deploys the build artifact to Azure App Service based on the selected environment.
+The pipeline performs the following tasks:
+1. Checks out the code from the repository.
+2. Sets up the .NET Core SDK.
+3. Restores NuGet packages.
+4. Builds the solution.
+5. Publishes the build artifacts.
+6. Deploys the published artifacts to an Azure Web App, based on the selected deployment environment.
 
-## Files
-- `azure-pipelines.yml`: The pipeline configuration file.
+## Parameters
 
-## Setup Instructions
+- **Deployment_Environment**: Specifies the deployment environment. It can be set to either `DEV` or `QA`. The default value is `DEV`.
 
-1. Ensure you have an Azure DevOps project.
-2. Add the pipeline by linking `azure-pipelines.yml`.
-3. Set up Azure service connections for both DEV and QA environments.
-4. Update `azure-pipelines.yml` as necessary for your project structure.
+## Steps Description
+
+### 1. Checkout
+
+Checks out the source code from the repository to ensure the latest version is used.
+
+### 2. Use .NET Core SDK
+
+Sets up the .NET Core SDK to the specified version (8.x in this case).
+
+### 3. NuGet Restore
+
+Restores the required NuGet packages for the solution.
+
+### 4. Build Solution
+
+Builds the solution in the Release configuration. This step ensures that all code is compiled and ready for deployment.
+
+### 5. Publish Artifacts
+
+Publishes the build artifacts to a staging directory. These artifacts are the files that will be deployed to the Azure Web App.
+
+### 6. Deploy to Azure Web App
+
+Deploys the published artifacts to an Azure Web App. The deployment is controlled by the `Deployment_Environment` parameter:
+
+- For **DEV** environment, it deploys to the DEV Web App.
+- For **QA** environment, it deploys to the QA Web App.
+
+## Usage
+
+1. **Set Up Your Azure DevOps Pipeline**: Add the `azure-pipelines.yml` file to the root of your repository.
+2. **Configure Azure Subscription**: Replace `<AzureSubscriptionName>` with your Azure subscription name or service connection.
+3. **Configure Web App Names**: Replace `<YourDevWebAppName>` and `<YourQaWebAppName>` with the names of your Azure Web Apps for DEV and QA environments, respectively.
+4. **Run the Pipeline**: Trigger the pipeline manually or by pushing changes to the repository.
+
