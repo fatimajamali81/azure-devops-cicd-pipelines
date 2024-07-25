@@ -1,0 +1,36 @@
+trigger: none
+
+pool:
+  vmImage: 'macOS-13'
+
+variables:
+  fastlane_version: '2.200.0'
+
+steps:
+
+- task: UseRubyVersion@0
+  inputs:
+    versionSpec: '>= 2.6'
+    addToPath: true
+
+- script: |
+    cd AndroidApp
+    echo "Installing Bundler and Fastlane..."
+    gem install bundler
+    bundle init
+    echo 'gem "fastlane", "~> $(fastlane_version)"' >> Gemfile
+    bundle install
+  displayName: 'Install Fastlane'
+
+- script: |
+    echo "Building the APK using Fastlane..."
+    cd "AndroidApp/fastlane"
+    bundle exec fastlane build_apk
+  displayName: 'Build APK using Fastlane'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'AndroidApp/app/build/outputs/apk/release'
+    ArtifactName: 'apk'
+    publishLocation: 'Container'
+  displayName: 'Publish APK Artifact'
