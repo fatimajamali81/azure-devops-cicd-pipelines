@@ -20,5 +20,8 @@ Each directory has its own detailed `README.md` with setup instructions and pipe
     ```
 2. Navigate to the desired pipeline directory and follow the instructions in the `README.md` file for setting up and using the pipeline.
 
+## Additional information
+I am planning to add more pipelines to this repo in future, Keep an eye out for updates!
+
 ## License
 This project is licensed under the MIT License.
