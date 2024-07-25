@@ -1,0 +1,63 @@
+trigger:
+  none
+
+pool:
+  vmImage: 'windows-latest'
+
+parameters:
+- name: Deployment_Environment
+  displayName: Deployment Environment
+  default: DEV
+  type: string
+  values:
+  - QA
+  - DEV
+
+jobs:
+- job: BuildAndListDist
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Install Node.js'
+
+  - task: PowerShell@2
+    inputs: 
+      targetType: 'inline'
+      script: |
+        cd "WebApp"
+        npm cache clean --force
+        npm install --legacy-peer-deps
+        npm install typescript@latest
+        npm install
+        npm run build
+    displayName: 'Install Dependencies and Build'
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/WebApp/dist'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/dist.zip'
+      replaceExistingArchive: true
+    displayName: 'Archive dist folder'
+
+  - ${{ if eq(parameters.Deployment_Environment, 'DEV') }}:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: '<AzureSubscriptionName>' # Replace with your Azure subscription name or service connection
+        appType: 'webApp'
+        WebAppName: '<YourDevWebAppName>' # Replace with your Azure Web App name for DEV environment
+        packageForLinux: '$(Build.ArtifactStagingDirectory)/dist.zip'
+      displayName: 'Deploy to Azure App Service'
+
+  - ${{ if eq(parameters.Deployment_Environment, 'QA') }}:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: '<AzureSubscriptionName>' # Replace with your Azure subscription name or service connection
+        appType: 'webApp'
+        WebAppName: '<YourDevWebAppName>' # Replace with your Azure Web App name for DEV environment
+        packageForLinux: '$(Build.ArtifactStagingDirectory)/dist.zip'
+      displayName: 'Deploy to Azure App Service'
