@@ -6,9 +6,9 @@ This repository contains a collection of Azure DevOps yaml pipelines, most of wh
 3. **.NET Core Web API** - Using .NET Core SDK for build and Azure DevOps for CI/CD.
 
 ## Directory Structure
-- `AndroidAppPipeline`: Contains the pipeline for building and deploying an Android application.
-- `ReactWebAppPipeline`: Contains the pipeline for building and deploying a React web application.
-- `DotNetCoreWebApiPipeline`: Contains the pipeline for building and deploying a .NET Core Web API.
+- `android-app-pipeline`: Contains the pipeline for building and deploying an Android application.
+- `react-web-app-cicd`: Contains the pipeline for building and deploying a React web application.
+- `dotnet-core-web-app-cicd`: Contains the pipeline for building and deploying a .NET Core Web API.
 
 Each directory has its own detailed `README.md` with setup instructions and pipeline details.
 
