@@ -1,0 +1,15 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build and package the Android APK"
+  lane :build_apk do
+    sh("cd ../.. && npm install") 
+
+    gradle(
+      task: "assembleRelease",
+      project_dir: "./"
+    )
+
+    apk_path = "AndroidApp/app/build/outputs/apk/release/app-release.apk"
+  end
+end
